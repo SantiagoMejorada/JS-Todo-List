@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+
+    <!-- Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h3 class="center-align">To-Do List</h3>
+
+        <!-- Task Input -->
+        <div class="input-field">
+            <input type="text" id="new-task" placeholder="Add a new task...">
+            <button id="add-task" class="btn waves-effect waves-light">Add</button>
+        </div>
+
+        <!-- Filters -->
+        <div class="row">
+            <button class="btn filter-btn" data-filter="all">All</button>
+            <button class="btn filter-btn" data-filter="completed">Completed</button>
+            <button class="btn filter-btn" data-filter="pending">Pending</button>
+        </div>
+
+        <ul id="task-list" class="collection"></ul>
+    </div>
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="JS/app.js"></script>
+</body>
+
+</html>
