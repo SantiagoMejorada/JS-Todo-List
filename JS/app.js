@@ -13,7 +13,7 @@ let tasks = loadTasks();
 renderTasks(tasks);
 
 //Event listeners
-addTaskButton.addEventListener("click",addTask);
+addTaskButton.addEventListener("click", addTask);
 taskList.addEventListener("click", handleTaskAction);
 filterButtons.forEach(btn => btn.addEventListener("click", filterTasks));
 
@@ -44,37 +44,69 @@ function renderTasks(taskArray) {
         li.innerHTML = `
         <span class="${task.completed ? 'completed-task' : ''}">${task.text}</span>
         <button class="btn-small green complete-task">✓</button>
+        <button class="btn-small orange edit-task">✎</button>
         <button class="btn-small red delete-task">✕</button>
       `;
-      taskList.appendChild(li);
+        taskList.appendChild(li);
+
+        //Set entry animation
+        li.classList.add("fade-in")
     });
 }
 
 function handleTaskAction(e) {
     const taskId = e.target.closest("li")?.dataset.id;
     if (!taskId) return;
-
+    const closestLi = e.target.closest("li");
     if (e.target.classList.contains("complete-task")) {
         toggleTaskCompletion(taskId);
     } else if (e.target.classList.contains("delete-task")) {
-        deleteTask(taskId);
+        deleteTask(taskId, closestLi);
+    } else if (e.target.classList.contains("edit-task")) {
+        editTask(taskId, closestLi)
     }
 
 }
 
 function toggleTaskCompletion(id) {
-    tasks = tasks.map(task => 
-        task.id === Number(id) ? 
-        {...task, completed: !task.completed} : task
+    tasks = tasks.map(task =>
+        task.id === Number(id) ?
+            { ...task, completed: !task.completed } : task
     )
     saveTasks(tasks);
     renderTasks(tasks);
 }
 
-function deleteTask(id) {
-    tasks = tasks.filter(task => task.id !== Number(id));
-    saveTasks(tasks);
-    renderTasks(tasks);
+function editTask(id, item) {
+    const task = tasks.find(task => task.id === Number(id));
+    if (!task) return;
+
+    const taskText = item.querySelector("span");
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = task.text;
+    input.classList.add("edit-input");
+
+    taskText.replaceWith(input);
+    input.focus();
+
+    input.addEventListener("blur", () => {
+        const newText = input.value.trim();
+        if (newText) {
+            task.text = newText;
+            saveTasks(tasks);
+        }
+        renderTasks(tasks);
+    });
+}
+
+function deleteTask(id, item) {
+    item.classList.add("fade-out");
+    setTimeout(() => {
+        tasks = tasks.filter(task => task.id !== Number(id));
+        saveTasks(tasks);
+        renderTasks(tasks);
+    }, 300);
 }
 
 function filterTasks(e) {
